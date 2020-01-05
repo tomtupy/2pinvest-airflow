@@ -28,18 +28,6 @@ default_args = {
   'provide_context': True # Provide_context is required when we're using XComs Airflow's concept to push and pull function results into an other task.
 }
 
-""" Parameters sent to the BashOperator command """
-import_parameters = {
-  'db_host': 'slave2.mycluster',
-  'db_port': '5047',
-  'db_name': 'imdb',
-  'db_schema': 'DEV',
-  'username': 'Tom',
-  'mappers': 3,
-  'target_dir': '/user/airflow/',
-  'compression_type': 'snappy'
-}
-
 def check_mds_health(**kwargs):
   mds_host = Variable.get("mds_url")
   health_check_url = f"{mds_host}/status"
@@ -100,7 +88,7 @@ Define a daily DAG using the default arguments by changing the "schedule_interva
 dag_lockup_exp_price_data = DAG(
   'lockup_period_expirations_price_data',
   default_args=default_args,
-  description='Importing daily data from DB2 IBM database into HDFS as parquet files',
+  description='Initiate price history fetch for companies in IPO period expirations table',
   schedule_interval='@once',
   catchup=False
 )
