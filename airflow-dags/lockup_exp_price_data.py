@@ -23,7 +23,7 @@ default_args = {
   'email': ['tomtupy@gmail.com'],
   'email_on_failure': True,
   'email_on_retry': False,
-  'retries': 1,
+  'retries': 0,
   'retry_delay': timedelta(minutes=5),
   'provide_context': True # Provide_context is required when we're using XComs Airflow's concept to push and pull function results into an other task.
 }
