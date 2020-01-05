@@ -66,7 +66,7 @@ def process_companies(**kwargs):
                       "force_recheck": "false", 
                       "use_cached_stats": "true"}
         print("Posting", post_data)
-        post_request = requests.post(url = price_history_queue_put_url, data = post_data)
+        post_request = requests.post(url = price_history_queue_put_url, json = post_data)
         print("Post result", post_request.text)
         if post_request.status_code != 200 or "result" not in post_request.json():
           request = post_request
@@ -97,13 +97,15 @@ dag_lockup_exp_price_data = DAG(
 op_check_mds_health = PythonOperator(
         task_id="check_mds_health",
         python_callable=check_mds_health,
-        dag=dag_lockup_exp_price_data)
+        dag=dag_lockup_exp_price_data,
+        retries=0)
 
 # PythonOperator to get the list of the tables.
 op_process_companies = PythonOperator(
         task_id="process_companies",
         python_callable=process_companies,
-        dag=dag_lockup_exp_price_data)
+        dag=dag_lockup_exp_price_data,
+        retries=0)
 
 # DummyOperator to check if it works!
 op_complete = DummyOperator(
